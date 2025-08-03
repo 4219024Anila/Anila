@@ -4,4 +4,6 @@
 <img width="942" height="670" alt="Image" src="https://github.com/user-attachments/assets/82bf9c4f-3374-4a84-95dd-07e8a5a2d4f4" />
 # Day 1 linux
 ![Image](https://github.com/user-attachments/assets/c8633621-73be-4f51-a573-f294ca4c9e80)
+# Day 2 linux
+![Image](https://github.com/user-attachments/assets/d62b0cb5-e96f-4e72-8881-f1f5f215485c)
 ![Image](https://github.com/user-attachments/assets/86b1df72-fe99-4d7a-9020-ccaf5395cc39)
