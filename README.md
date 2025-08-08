@@ -7,3 +7,4 @@
 # Day 2 linux
 ![Image](https://github.com/user-attachments/assets/d62b0cb5-e96f-4e72-8881-f1f5f215485c)
 ![Image](https://github.com/user-attachments/assets/86b1df72-fe99-4d7a-9020-ccaf5395cc39)
+![Image](https://github.com/user-attachments/assets/150ca0ef-5a65-46bc-bb25-ad2acf0f542e)
