@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int sockMerchant(int totalAni, int* arNila) {
+    #define MAX_COLOR_VAL 101 
+    int sockCountA[MAX_COLOR_VAL] = {0}; // Counts per sock color
+    int pairInL = 0;
+
+    // Count each sock color
+    for (int i = 0; i < totalAni; i++) {
+        sockCountA[arNila[i]]++;
+    }
+
+    // Compute total pairs
+    for (int l = 0; l < MAX_COLOR_VAL; l++) {
+        pairInL += sockCountA[l] / 2;
+    }
+
+    return pairInL;
+}
+
+int main() {
+    int nIla;
+    scanf("%d", &nIla);
+
+    int* arNila = (int*)malloc(nIla * sizeof(int));
+    for (int i = 0; i < nIla; i++) {
+        scanf("%d", &arNila[i]);
+    }
+
+    int resultL = sockMerchant(nIla, arNila);
+    printf("%d\n", resultL);
+
+    free(arNila);
+    return 0;
+}
