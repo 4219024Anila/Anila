@@ -1,0 +1,20 @@
+#include <stdio.h>
+int main() {
+    char anilaTimeInput[11]; 
+    scanf("%s", anilaTimeInput);
+    int anilaHour = (anilaTimeInput[0] - '0') * 10 + (anilaTimeInput[1] - '0'); // 
+    if (anilaTimeInput[8] == 'P') { // PM case
+        if (anilaHour != 12) {
+            anilaHour += 12;
+        }
+    } else { // AM case
+        if (anilaHour == 12) {
+            anilaHour = 0;
+        }
+    }
+    anilaTimeInput[0] = (anilaHour / 10) + '0';
+    anilaTimeInput[1] = (anilaHour % 10) + '0';
+    anilaTimeInput[8] = '\0';
+    printf("%s\n", anilaTimeInput);
+    return 0;
+}
