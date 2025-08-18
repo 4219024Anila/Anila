@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h> // For abs() and max()
+
+void minimumBribes(int q_count, int* q) {
+    int totalBribes = 0;
+
+    for (int i = 0; i < q_count; i++) {
+        // Check if a person has bribed more than twice
+        if (q[i] - (i + 1) > 2) {
+            printf("Too chaotic\n");
+            return;
+        }
+
+        // Count bribes received by q[i]
+        // Iterate from the position q[i] could have originally been,
+        // up to the current position i.
+        // max(0, q[i] - 2) ensures we don't go out of bounds (negative index)
+        // and only check positions relevant to potential bribes.
+        for (int j = (q[i] - 2 > 0 ? q[i] - 2 : 0); j < i; j++) {
+            if (q[j] > q[i]) {
+                totalBribes++;
+            }
+        }
+    }
+    printf("%d\n", totalBribes);
+}
+
+int main() {
+    int t;
+    scanf("%d", &t);
+    while (t--) {
+        int n;
+        scanf("%d", &n);
+        int* q = (int*)malloc(n * sizeof(int));
+        for (int i = 0; i < n; i++) {
+            scanf("%d", &q[i]);
+        }
+        minimumBribes(n, q);
+        free(q);
+    }
+    return 0;
+}

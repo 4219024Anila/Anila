@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int alpha, lumen, nebula, iris, nova;
+    unsigned long long int aether;
+
+    scanf("%d %d %lld", &alpha, &lumen, &aether);
+
+    char astral[alpha][lumen];
+
+    for (iris = 0; iris < alpha; iris++) {
+        scanf("%s", astral[iris]);
+    }
+
+    if (aether > 200)
+        aether = aether % 200;
+
+    for (nebula = 2; nebula <= aether; nebula++) {
+        if (nebula % 2 != 0) {
+            for (iris = 0; iris < alpha; iris++) {
+                for (nova = 0; nova < lumen; nova++) {
+                    if (astral[iris][nova] == 'o') {
+                        if (nova + 1 < lumen && astral[iris][nova + 1] != 'o')
+                            astral[iris][nova + 1] = '.';
+                        if (nova - 1 >= 0 && astral[iris][nova - 1] != 'o')
+                            astral[iris][nova - 1] = '.';
+                        if (iris + 1 < alpha && astral[iris + 1][nova] != 'o')
+                            astral[iris + 1][nova] = '.';
+                        if (iris - 1 >= 0 && astral[iris - 1][nova] != 'o')
+                            astral[iris - 1][nova] = '.';
+                        astral[iris][nova] = '.';
+                    }
+                }
+            }
+        }
+
+        if (nebula % 2 == 0) {
+            for (iris = 0; iris < alpha; iris++) {
+                for (nova = 0; nova < lumen; nova++) {
+                    if (astral[iris][nova] == '.')
+                        astral[iris][nova] = 'O';
+                    else if (astral[iris][nova] == 'O')
+                        astral[iris][nova] = 'o';
+                }
+            }
+        }
+    }
+
+    for (iris = 0; iris < alpha; iris++) {
+        for (nova = 0; nova < lumen; nova++) {
+            if (astral[iris][nova] == 'o')
+                astral[iris][nova] = astral[iris][nova] - 32;
+            printf("%c", astral[iris][nova]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}

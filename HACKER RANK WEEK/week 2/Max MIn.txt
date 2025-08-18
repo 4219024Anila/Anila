@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int compare(const void *alpha, const void *nova) {
+    return (*(int *)alpha - *(int *)nova);
+}
+
+int mystery(int ivy, int luna[], int aurora) {
+    qsort(luna, aurora, sizeof(int), compare);
+
+    int ninja = luna[ivy - 1] - luna[0];
+
+    for (int astro = 1; astro <= aurora - ivy; astro++) {
+        int nebula = luna[astro + ivy - 1] - luna[astro];
+        if (nebula < ninja) {
+            ninja = nebula;
+        }
+    }
+
+    return ninja;
+}
+
+int main() {
+    int alpha, nova;
+    scanf("%d", &alpha);
+    scanf("%d", &nova);
+
+    int luna[alpha];
+    for (int aurora = 0; aurora < alpha; aurora++) {
+        scanf("%d", &luna[aurora]);
+    }
+
+    int ivy = mystery(nova, luna, alpha);
+    printf("%d\n", ivy);
+
+    return 0;
+}

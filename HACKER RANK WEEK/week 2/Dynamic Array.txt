@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int nebula, iris;
+    scanf("%d %d", &nebula, &iris);
+
+    int **aurora = (int **)malloc(nebula * sizeof(int *));
+    int *lumen = (int *)calloc(nebula, sizeof(int));
+
+    for (int alpha = 0; alpha < nebula; alpha++) {
+        aurora[alpha] = NULL;
+    }
+
+    int astral = 0;
+
+    for (int nova = 0; nova < iris; nova++) {
+        int light, arc, star;
+        scanf("%d %d %d", &light, &arc, &star);
+
+        int axis = (arc ^ astral) % nebula;
+
+        if (light == 1) {
+            aurora[axis] = realloc(aurora[axis], (lumen[axis] + 1) * sizeof(int));
+            aurora[axis][lumen[axis]++] = star;
+        } else {
+            astral = aurora[axis][star % lumen[axis]];
+            printf("%d\n", astral);
+        }
+    }
+
+    for (int alpha = 0; alpha < nebula; alpha++) {
+        free(aurora[alpha]);
+    }
+
+    free(aurora);
+    free(lumen);
+
+    return 0;
+}

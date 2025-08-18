@@ -1,0 +1,24 @@
+#include <stdio.h>
+
+int main() {
+    int n, k;
+    char s[10001];
+    
+    scanf("%d", &n);
+    scanf("%s", s);
+    scanf("%d", &k);
+
+    k %= 26;
+
+    for (int i = 0; s[i] != '\0'; i++) {
+        char ch = s[i];
+        if (ch >= 'a' && ch <= 'z') {
+            s[i] = ((ch - 'a' + k) % 26) + 'a';
+        } else if (ch >= 'A' && ch <= 'Z') {
+            s[i] = ((ch - 'A' + k) % 26) + 'A';
+        }
+    }
+
+    printf("%s\n", s);
+    return 0;
+}
