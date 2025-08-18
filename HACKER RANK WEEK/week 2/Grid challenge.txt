@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int compareChars(const void *x, const void *y) {
+    return (*(char *)x - *(char *)y);
+}
+
+int main() {
+    int tests; 
+    scanf("%d", &tests);
+    while (tests--) {
+        int size;
+        scanf("%d", &size);
+        char grid[101][101];
+        for (int row = 0; row < size; row++) {
+            scanf("%s", grid[row]);
+            qsort(grid[row], size, sizeof(char), compareChars);
+        }
+        int sorted = 1;
+        for (int col = 0; col < size && sorted; col++) {
+            for (int row = 1; row < size; row++) {
+                if (grid[row][col] < grid[row-1][col]) {
+                    sorted = 0;
+                    break;
+                }
+            }
+        }
+        printf("%s\n", sorted ? "YES" : "NO");
+    }
+    return 0;
+}
