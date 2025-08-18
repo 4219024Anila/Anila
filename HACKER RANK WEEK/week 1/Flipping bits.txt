@@ -1,0 +1,20 @@
+#include <stdio.h>
+
+unsigned int flippingBits(unsigned int anilaNumber) {
+    return ~anilaNumber & 0xFFFFFFFF;
+}
+
+int main() {
+    int anilaQueries;
+    scanf("%d", &anilaQueries);
+    
+    for (int anilaIndex = 0; anilaIndex < anilaQueries; anilaIndex++) {
+        unsigned int anilaInput;
+        scanf("%u", &anilaInput);
+        
+        unsigned int anilaResult = flippingBits(anilaInput);
+        printf("%u\n", anilaResult);
+    }
+
+    return 0;
+}

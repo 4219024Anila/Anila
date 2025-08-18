@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Standard comparison function for qsort
+int cmp(const void* a, const void* b) {
+    return (*(int*)a - *(int*)b);
+}
+
+void findZigZagSequence(int a[], int n) {
+    qsort(a, n, sizeof(int), cmp);  // Change 1: sort using qsort in C
+
+    int mid = (n - 1) / 2;          // Change 2: correct mid index for 0-based array
+
+    // Change 3: swap mid and last element
+    int temp = a[mid];
+    a[mid] = a[n - 1];
+    a[n - 1] = temp;
+
+    int left = mid + 1;
+    int right = n - 2;
+
+    while (left <= right) {
+        temp = a[left];
+        a[left] = a[right];
+        a[right] = temp;
+        left++;
+        right--;
+    }
+
+    for (int i = 0; i < n; i++) {
+        if (i > 0) printf(" ");
+        printf("%d", a[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int t;
+    scanf("%d", &t);
+    while (t--) {
+        int n;
+        scanf("%d", &n);
+        int a[n];
+        for (int i = 0; i < n; i++) {
+            scanf("%d", &a[i]);
+        }
+        findZigZagSequence(a, n);
+    }
+    return 0;
+}
