@@ -1,0 +1,56 @@
+#include <stdio.h>
+
+#define MAX_SIZE 100000
+
+int newestStack[MAX_SIZE], topNewest = -1;
+int oldestStack[MAX_SIZE], topOldest = -1;
+
+void pushNew(int val) {
+    newestStack[++topNewest] = val;
+}
+
+void pushOld(int val) {
+    oldestStack[++topOldest] = val;
+}
+
+int popOld() {
+    return oldestStack[topOldest--];
+}
+
+int peekOld() {
+    return oldestStack[topOldest];
+}
+
+void shiftStacks() {
+    while (topNewest >= 0) {
+        pushOld(newestStack[topNewest--]);
+    }
+}
+
+int main() {
+    int queries;
+    scanf("%d", &queries);
+
+    for (int i = 0; i < queries; i++) {
+        int cmd;
+        scanf("%d", &cmd);
+
+        if (cmd == 1) {
+            int val;
+            scanf("%d", &val);
+            pushNew(val);
+        } else if (cmd == 2) {
+            if (topOldest == -1) {
+                shiftStacks();
+            }
+            popOld();
+        } else if (cmd == 3) {
+            if (topOldest == -1) {
+                shiftStacks();
+            }
+            printf("%d\n", peekOld());
+        }
+    }
+
+    return 0;
+}

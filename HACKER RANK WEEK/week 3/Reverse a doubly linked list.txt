@@ -1,0 +1,17 @@
+merge at line 90
+
+ if (llist == NULL) return NULL;
+
+    DoublyLinkedListNode* current = llist;
+    DoublyLinkedListNode* temp = NULL;
+
+    while (current != NULL) {
+        temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;
+
+        llist = current;
+        current = current->prev;
+    }
+
+    return llist;
