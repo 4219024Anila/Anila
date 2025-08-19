@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_LEN 1000000
+#define MAX_OPS 100000
+
+// Stack for storing previous states of the string
+char *history[MAX_OPS];
+int top = -1;
+
+// Push current state to history
+void push(char *str) {
+    history[++top] = strdup(str);  // Store a copy of the current string
+}
+
+// Pop the top state from history
+char* pop() {
+    if (top >= 0) {
+        char *prev = history[top--];
+        return prev;
+    }
+    return NULL;
+}
+
+int main() {
+    int Q;
+    scanf("%d", &Q);
+    
+    char S[MAX_LEN + 1] = ""; // The text content
+    int opType, k;
+    char argument[MAX_LEN + 1];
+
+    for (int i = 0; i < Q; i++) {
+        scanf("%d", &opType);
+
+        switch(opType) {
+            case 1: // append
+                scanf("%s", argument);
+                push(S); // Save current state
+                strcat(S, argument); // Append
+                break;
+
+            case 2: // delete
+                scanf("%d", &k);
+                push(S); // Save current state
+                S[strlen(S) - k] = '\0'; // Truncate last k characters
+                break;
+
+            case 3: // print
+                scanf("%d", &k);
+                printf("%c\n", S[k - 1]); 
+                break;
+
+            case 4: { // undo
+                char *prev = pop(); 
+                if (prev) {
+                    strcpy(S, prev);
+                    free(prev);
+                }
+                break;
+            }
+
+            default:
+                // Invalid operation
+                break;
+        }
+    }
+
+    // Free any remaining allocated memory in history
+    while (top >= 0) {
+        free(history[top--]);
+    }
+
+    return 0;
+}

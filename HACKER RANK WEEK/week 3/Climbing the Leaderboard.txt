@@ -1,0 +1,71 @@
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <limits.h>
+#include <stdbool.h>
+
+int main()
+{
+    int totalScores, uniqueRanks = 0; 
+    scanf("%d", &totalScores);
+
+    int scores[totalScores];
+    for(int i = 0; i < totalScores; i++)
+    {
+        scanf("%d", &scores[i]);
+
+        if (i == 0 || scores[i] != scores[i - 1])
+        {
+            uniqueRanks++;
+        }
+    }
+
+    int index = 0;
+    int leaderboardScores[uniqueRanks];
+
+    for(int i = 0; i < totalScores; i++)
+    {
+        if(i == 0 || scores[i] != scores[i - 1])
+        {
+            leaderboardScores[index++] = scores[i];
+        }
+    }
+
+    int aliceGames; 
+    scanf("%d", &aliceGames);
+    int aliceScores[aliceGames];
+
+    for(int i = 0; i < aliceGames; i++)
+    {
+        scanf("%d", &aliceScores[i]);
+    }
+
+    int lastCheckedIndex = uniqueRanks - 1;
+
+    for(int i = 0; i < aliceGames; i++)
+    {
+        for(int j = lastCheckedIndex; j >= 0; j--)
+        {
+            if(aliceScores[i] < leaderboardScores[j])
+            {
+                printf("%d\n", j + 2);
+                lastCheckedIndex = j;
+                break;
+            }
+            else if(aliceScores[i] == leaderboardScores[j])
+            {
+                printf("%d\n", j + 1);
+                lastCheckedIndex = j;
+                break;
+            }
+            else if(j == 0)
+            {
+                printf("1\n");
+            }
+        }
+    }
+
+    return 0;
+}

@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_PRICE 10000
+
+int main() {
+    int tripCount;
+    scanf("%d", &tripCount);
+
+    while (tripCount--) {
+        int totalMoney, flavorCount;
+        scanf("%d", &totalMoney);
+        scanf("%d", &flavorCount);
+
+        int prices[flavorCount];
+        for (int i = 0; i < flavorCount; i++) {
+            scanf("%d", &prices[i]);
+        }
+
+        int priceIndexMap[MAX_PRICE] = {0}; // Maps price to 1-based index
+
+        for (int i = 0; i < flavorCount; i++) {
+            int remaining = totalMoney - prices[i];
+
+            if (remaining >= 0 && priceIndexMap[remaining] > 0) {
+                int firstIndex = priceIndexMap[remaining];
+                int secondIndex = i + 1;
+
+                if (firstIndex < secondIndex)
+                    printf("%d %d\n", firstIndex, secondIndex);
+                else
+                    printf("%d %d\n", secondIndex, firstIndex);
+                
+                break; // Unique solution
+            }
+
+            // Store price with its 1-based index if not already stored
+            if (priceIndexMap[prices[i]] == 0) {
+                priceIndexMap[prices[i]] = i + 1;
+            }
+        }
+    }
+
+    return 0;
+}

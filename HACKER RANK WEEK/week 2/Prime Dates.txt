@@ -1,0 +1,51 @@
+#include <stdio.h>
+int isLeapYear(int year) {
+    return (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0));
+}
+int getDaysInMonth(int month, int year) {
+    if (month == 2)
+        return isLeapYear(year) ? 29 : 28;
+    if (month == 4 || month == 6 || month == 9 || month == 11)
+        return 30;
+    return 31;
+}
+void nextDate(int *day, int *month, int *year) {
+    (*day)++;
+    if (*day > getDaysInMonth(*month, *year)) {
+        *day = 1;
+        (*month)++;
+        if (*month > 12) {
+            *month = 1;
+            (*year)++;
+        }
+    }
+}
+int countLuckyDates(int dStart, int mStart, int yStart, int dEnd, int mEnd, int yEnd) {
+    int count = 0;
+
+    while (yStart < yEnd || (yStart == yEnd && mStart < mEnd) || 
+           (yStart == yEnd && mStart == mEnd && dStart <= dEnd)) {
+
+        int dateNum = dStart * 1000000 + mStart * 10000 + yStart;
+        if ((dStart != 0 && dateNum % dStart == 0) || 
+            (mStart != 0 && dateNum % mStart == 0))
+            count++;
+
+        nextDate(&dStart, &mStart, &yStart);
+    }
+
+    return count;
+}
+
+int main() {
+    int day1, month1, year1;
+    int day2, month2, year2;
+
+    scanf("%d-%d-%d", &day1, &month1, &year1);
+    scanf("%d-%d-%d", &day2, &month2, &year2);
+
+    int luckyDateCount = countLuckyDates(day1, month1, year1, day2, month2, year2);
+    printf("%d\n", luckyDateCount);
+
+    return 0;
+}
