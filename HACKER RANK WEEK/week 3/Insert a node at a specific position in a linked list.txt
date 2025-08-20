@@ -1,0 +1,23 @@
+merge at 89th line 
+
+SinglyLinkedListNode* new_node = create_singly_linked_list_node(data);
+
+    // If inserting at the head (position 0)
+    if (position == 0) {
+        new_node->next = llist;
+        return new_node;
+    }
+
+    // Traverse the list to the node before the insertion point
+    SinglyLinkedListNode* current = llist;
+    for (int i = 0; i < position - 1 && current != NULL; i++) {
+        current = current->next;
+    }
+
+    // Insert the new node
+    if (current != NULL) {
+        new_node->next = current->next;
+        current->next = new_node;
+    }
+
+    return llist;
