@@ -30,13 +30,11 @@ int countLuckyDates(int dStart, int mStart, int yStart, int dEnd, int mEnd, int 
         if ((dStart != 0 && dateNum % dStart == 0) || 
             (mStart != 0 && dateNum % mStart == 0))
             count++;
-
         nextDate(&dStart, &mStart, &yStart);
     }
 
     return count;
 }
-
 int main() {
     int day1, month1, year1;
     int day2, month2, year2;
