@@ -2,7 +2,6 @@ merge at 81st line
 
 if (!head1) return head2;
     if (!head2) return head1;
-
     SinglyLinkedListNode* mergedHead = NULL;
     SinglyLinkedListNode* mergedTail = NULL;
 
