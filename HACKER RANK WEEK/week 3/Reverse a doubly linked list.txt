@@ -1,5 +1,6 @@
 merge at line 90
 
+
  if (llist == NULL) return NULL;
 
     DoublyLinkedListNode* current = llist;
