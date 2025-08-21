@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+char* highestValuePalindrome(char* s, int n, int k) {
+    int left = 0, right = n - 1;
+    int changes[n];
+    memset(changes, 0, sizeof(changes));
+    
+    // Step 1: Make it a palindrome with minimum changes
+    int changesUsed = 0;
+    while (left < right) {
+        if (s[left] != s[right]) {
+            char maxChar = s[left] > s[right] ? s[left] : s[right];
+            s[left] = s[right] = maxChar;
+            changes[left] = 1;  // Mark this position as changed
+            changesUsed++;
+        }
+        left++;
+        right--;
+    }
+
+    if (changesUsed > k) {
+        return "-1";
+    }
+
+    // Step 2: Maximize the palindrome value with remaining changes
+    left = 0;
+    right = n - 1;
+    int remainingChanges = k - changesUsed;
+
+    while (left <= right) {
+        if (left == right) {
+            // For middle digit in odd-length strings
+            if (remainingChanges > 0 && s[left] != '9') {
+                s[left] = '9';
+            }
+        } else {
+            if (s[left] < '9') {
+                if (changes[left] && remainingChanges >= 1) {
+                    s[left] = s[right] = '9';
+                    remainingChanges--;
+                } else if (!changes[left] && remainingChanges >= 2) {
+                    s[left] = s[right] = '9';
+                    remainingChanges -= 2;
+                }
+            }
+        }
+        left++;
+        right--;
+    }
+
+    return s;
+}
+
+int main() {
+    int n, k;
+    scanf("%d %d", &n, &k);
+    char* s = malloc((n + 1) * sizeof(char));
+    scanf("%s", s);
+
+    char* result = highestValuePalindrome(s, n, k);
+    printf("%s\n", result);
+
+    free(s);
+    return 0;
+}
