@@ -1,0 +1,91 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100000
+
+// Deque structure to maintain indices
+typedef struct {
+    int data[MAX];
+    int front;
+    int rear;
+} Deque;
+
+void initDeque(Deque* dq) {
+    dq->front = 0;
+    dq->rear = -1;
+}
+
+void pushBack(Deque* dq, int value) {
+    dq->rear++;
+    dq->data[dq->rear] = value;
+}
+
+void popFront(Deque* dq) {
+    dq->front++;
+}
+
+void popBack(Deque* dq) {
+    dq->rear--;
+}
+
+int front(Deque* dq) {
+    return dq->data[dq->front];
+}
+
+int back(Deque* dq) {
+    return dq->data[dq->rear];
+}
+
+int isEmpty(Deque* dq) {
+    return dq->front > dq->rear;
+}
+
+// Get minimum of all window maximums for window size d
+int getMinOfWindowMaximums(int* arr, int n, int d) {
+    Deque dq;
+    initDeque(&dq);
+    int minOfMax = __INT_MAX__;
+
+    for (int i = 0; i < n; i++) {
+        // Remove out-of-window elements
+        if (!isEmpty(&dq) && front(&dq) <= i - d) {
+            popFront(&dq);
+        }
+
+        // Remove smaller elements from back
+        while (!isEmpty(&dq) && arr[back(&dq)] <= arr[i]) {
+            popBack(&dq);
+        }
+
+        pushBack(&dq, i);
+
+        // Process only when window is full
+        if (i >= d - 1) {
+            int currentMax = arr[front(&dq)];
+            if (currentMax < minOfMax) {
+                minOfMax = currentMax;
+            }
+        }
+    }
+
+    return minOfMax;
+}
+
+int main() {
+    int n, q;
+    scanf("%d %d", &n, &q);
+
+    int arr[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    for (int i = 0; i < q; i++) {
+        int d;
+        scanf("%d", &d);
+        int result = getMinOfWindowMaximums(arr, n, d);
+        printf("%d\n", result);
+    }
+
+    return 0;
+}

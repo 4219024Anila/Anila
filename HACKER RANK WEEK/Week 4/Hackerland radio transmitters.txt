@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Comparator for qsort
+int compareIntegers(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
+}
+
+int countRadioTransmitters(int housePositions[], int houseCount, int transmitterRange) {
+    qsort(housePositions, houseCount, sizeof(int), compareIntegers);
+
+    int transmitterCount = 0;
+    int currentIndex = 0;
+
+    while (currentIndex < houseCount) {
+        transmitterCount++;
+
+        // Find the farthest house to the right within transmitterRange from current house
+        int maxCoverageStart = housePositions[currentIndex] + transmitterRange;
+        while (currentIndex < houseCount && housePositions[currentIndex] <= maxCoverageStart) {
+            currentIndex++;
+        }
+
+        // Place the transmitter at the last house that can cover previous range
+        int transmitterPosition = housePositions[currentIndex - 1] + transmitterRange;
+        while (currentIndex < houseCount && housePositions[currentIndex] <= transmitterPosition) {
+            currentIndex++;
+        }
+    }
+
+    return transmitterCount;
+}
+
+int main() {
+    int houseCount, transmitterRange;
+    scanf("%d %d", &houseCount, &transmitterRange);
+
+    int housePositions[houseCount];
+    for (int i = 0; i < houseCount; i++) {
+        scanf("%d", &housePositions[i]);
+    }
+
+    int result = countRadioTransmitters(housePositions, houseCount, transmitterRange);
+    printf("%d\n", result);
+
+    return 0;
+}
