@@ -1,0 +1,166 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 256   // Maximum unique characters
+
+// Huffman tree node
+typedef struct HuffNode {
+    char symbol;
+    int count;
+    struct HuffNode *left, *right;
+} HuffNode;
+
+// Min-Heap structure
+typedef struct {
+    HuffNode* items[MAX];
+    int length;
+} MinHeap;
+
+// Create a new node
+HuffNode* makeNode(char symbol, int count) {
+    HuffNode* node = (HuffNode*)malloc(sizeof(HuffNode));
+    node->symbol = symbol;
+    node->count = count;
+    node->left = node->right = NULL;
+    return node;
+}
+
+// Swap nodes
+void swapNodes(HuffNode** a, HuffNode** b) {
+    HuffNode* tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+// Heapify
+void heapify(MinHeap* heap, int idx) {
+    int smallest = idx;
+    int left = 2*idx + 1;
+    int right = 2*idx + 2;
+
+    if (left < heap->length && heap->items[left]->count < heap->items[smallest]->count)
+        smallest = left;
+    if (right < heap->length && heap->items[right]->count < heap->items[smallest]->count)
+        smallest = right;
+
+    if (smallest != idx) {
+        swapNodes(&heap->items[idx], &heap->items[smallest]);
+        heapify(heap, smallest);
+    }
+}
+
+// Extract min node
+HuffNode* popMin(MinHeap* heap) {
+    HuffNode* temp = heap->items[0];
+    heap->items[0] = heap->items[heap->length - 1];
+    heap->length--;
+    heapify(heap, 0);
+    return temp;
+}
+
+// Insert node
+void pushHeap(MinHeap* heap, HuffNode* node) {
+    heap->length++;
+    int i = heap->length - 1;
+    heap->items[i] = node;
+
+    while (i && heap->items[i]->count < heap->items[(i-1)/2]->count) {
+        swapNodes(&heap->items[i], &heap->items[(i-1)/2]);
+        i = (i-1)/2;
+    }
+}
+
+// Build Huffman tree
+HuffNode* buildTree(char symbols[], int counts[], int n) {
+    MinHeap heap;
+    heap.length = 0;
+
+    for (int i = 0; i < n; i++)
+        pushHeap(&heap, makeNode(symbols[i], counts[i]));
+
+    while (heap.length > 1) {
+        HuffNode* left = popMin(&heap);
+        HuffNode* right = popMin(&heap);
+
+        HuffNode* parent = makeNode('\0', left->count + right->count);
+        parent->left = left;
+        parent->right = right;
+
+        pushHeap(&heap, parent);
+    }
+    return popMin(&heap);
+}
+
+// Generate codes
+void makeCodes(HuffNode* root, char path[], int depth, char table[MAX][MAX]) {
+    if (root->left) {
+        path[depth] = '0';
+        makeCodes(root->left, path, depth+1, table);
+    }
+    if (root->right) {
+        path[depth] = '1';
+        makeCodes(root->right, path, depth+1, table);
+    }
+    if (!root->left && !root->right) {
+        path[depth] = '\0';
+        strcpy(table[(unsigned char)root->symbol], path);
+    }
+}
+
+// Decode Huffman string
+void decodeMessage(HuffNode* root, const char* bits) {
+    HuffNode* node = root;
+    for (int i = 0; bits[i] != '\0'; i++) {
+        node = (bits[i] == '0') ? node->left : node->right;
+
+        if (!node->left && !node->right) {
+            printf("%c", node->symbol);
+            node = root;
+        }
+    }
+    printf("\n");
+}
+
+// Main function
+int main() {
+    char text[1000];
+    scanf("%s", text);
+
+    // Frequency map
+    int freqMap[MAX] = {0};
+    for (int i = 0; text[i]; i++) {
+        freqMap[(unsigned char)text[i]]++;
+    }
+
+    // Collect symbols and frequencies
+    char symbols[MAX];
+    int counts[MAX];
+    int total = 0;
+    for (int i = 0; i < MAX; i++) {
+        if (freqMap[i]) {
+            symbols[total] = (char)i;
+            counts[total] = freqMap[i];
+            total++;
+        }
+    }
+
+    // Build Huffman tree
+    HuffNode* root = buildTree(symbols, counts, total);
+
+    // Generate codes
+    char table[MAX][MAX] = {0};
+    char path[MAX];
+    makeCodes(root, path, 0, table);
+
+    // Encode
+    char encoded[5000] = "";
+    for (int i = 0; text[i]; i++) {
+        strcat(encoded, table[(unsigned char)text[i]]);
+    }
+
+    // Decode
+    decodeMessage(root, encoded);
+
+    return 0;
+}

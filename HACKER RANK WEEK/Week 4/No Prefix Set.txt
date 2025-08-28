@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define ALPHABET_SIZE 26
+#define MAX_WORDS 100005
+#define MAX_WORD_LENGTH 60
+
+typedef struct TrieNode {
+    char data;
+    struct TrieNode* children[ALPHABET_SIZE];
+    int isTerminal;
+} TrieNode;
+
+// Function to create a new Trie node
+TrieNode* createNode(char character) {
+    TrieNode* node = (TrieNode*)malloc(sizeof(TrieNode));
+    node->data = character;
+    node->isTerminal = 0;
+    for (int idx = 0; idx < ALPHABET_SIZE; idx++) {
+        node->children[idx] = NULL;
+    }
+    return node;
+}
+
+// Function to initialize the Trie
+TrieNode* createTrie() {
+    return createNode('\0');
+}
+
+// Insert a word into the Trie
+// Returns 1 if valid set, 0 if bad set
+int insertWord(TrieNode* trieRoot, const char* currentWord) {
+    TrieNode* currentNode = trieRoot;
+    int wordLength = strlen(currentWord);
+
+    for (int pos = 0; pos < wordLength; pos++) {
+        char currentChar = currentWord[pos];
+        int childIndex = currentChar - 'a';
+
+        // Case: current word is a prefix of an existing word
+        if (pos == wordLength - 1 && currentNode->children[childIndex] != NULL) {
+            return 0; // BAD SET
+        }
+
+        if (currentNode->children[childIndex] == NULL) {
+            currentNode->children[childIndex] = createNode(currentChar);
+        } else {
+            // Case: existing word is a prefix of current word
+            if (currentNode->children[childIndex]->isTerminal) {
+                return 0; // BAD SET
+            }
+        }
+        currentNode = currentNode->children[childIndex];
+    }
+
+    currentNode->isTerminal = 1;
+    return 1; // GOOD SET
+}
+
+int main() {
+    int totalWords;
+    scanf("%d", &totalWords);
+
+    TrieNode* trieRoot = createTrie();
+    char words[MAX_WORDS][MAX_WORD_LENGTH];
+    for (int wordIndex = 0; wordIndex < totalWords; wordIndex++) {
+        scanf("%s", words[wordIndex]);
+    }
+
+    int isValidSet = 1;
+    for (int wordIndex = 0; wordIndex < totalWords; wordIndex++) {
+        isValidSet = insertWord(trieRoot, words[wordIndex]);
+        if (!isValidSet) {
+            printf("BAD SET\n%s\n", words[wordIndex]);
+            break;
+        }
+    }
+
+    if (isValidSet) {
+        printf("GOOD SET\n");
+    }
+
+    return 0;
+}

@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+
+#define MAXN 100
+
+typedef struct {
+    int x, y, dist;
+} Node;
+
+int minimumMoves(char grid[MAXN][MAXN], int n, int startX, int startY, int goalX, int goalY) {
+    bool visited[MAXN][MAXN];
+    memset(visited, false, sizeof(visited));
+
+    // BFS queue
+    Node queue[MAXN * MAXN];
+    int front = 0, rear = 0;
+
+    queue[rear++] = (Node){startX, startY, 0};
+    visited[startX][startY] = true;
+
+    int directions[4][2] = {{0,1},{0,-1},{1,0},{-1,0}};
+
+    while (front < rear) {
+        Node cur = queue[front++];
+
+        if (cur.x == goalX && cur.y == goalY) {
+            return cur.dist;
+        }
+
+        for (int d = 0; d < 4; d++) {
+            int nx = cur.x + directions[d][0];
+            int ny = cur.y + directions[d][1];
+
+            // Move in one direction until hitting a wall or boundary
+            while (nx >= 0 && nx < n && ny >= 0 && ny < n && grid[nx][ny] == '.') {
+                if (!visited[nx][ny]) {
+                    visited[nx][ny] = true;
+                    queue[rear++] = (Node){nx, ny, cur.dist + 1};
+                }
+                nx += directions[d][0];
+                ny += directions[d][1];
+            }
+        }
+    }
+    return -1; // unreachable
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    char grid[MAXN][MAXN];
+    for (int i = 0; i < n; i++) {
+        scanf("%s", grid[i]);
+    }
+
+    int startX, startY, goalX, goalY;
+    scanf("%d %d %d %d", &startX, &startY, &goalX, &goalY);
+
+    int result = minimumMoves(grid, n, startX, startY, goalX, goalY);
+    printf("%d\n", result);
+
+    return 0;
+}

@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure to hold value with original index
+typedef struct {
+    int value;
+    int originalIndex;
+} Element;
+
+// Comparator for ascending order
+int compareAsc(const void* a, const void* b) {
+    Element* e1 = (Element*)a;
+    Element* e2 = (Element*)b;
+    return (e1->value - e2->value);
+}
+
+// Comparator for descending order
+int compareDesc(const void* a, const void* b) {
+    Element* e1 = (Element*)a;
+    Element* e2 = (Element*)b;
+    return (e2->value - e1->value);
+}
+
+// Function to count swaps required to sort
+int countSwaps(Element elements[], int arraySize) {
+    int visitedNodes[arraySize];
+    for (int pos = 0; pos < arraySize; pos++) {
+        visitedNodes[pos] = 0;
+    }
+
+    int swapCount = 0;
+    for (int pos = 0; pos < arraySize; pos++) {
+        if (visitedNodes[pos] || elements[pos].originalIndex == pos)
+            continue;
+
+        int cycleSize = 0;
+        int nextPos = pos;
+        while (!visitedNodes[nextPos]) {
+            visitedNodes[nextPos] = 1;
+            nextPos = elements[nextPos].originalIndex;
+            cycleSize++;
+        }
+        if (cycleSize > 1) {
+            swapCount += (cycleSize - 1);
+        }
+    }
+    return swapCount;
+}
+
+int lilysHomework(int originalArray[], int arraySize) {
+    // Create arrays for ascending and descending orders
+    Element ascElements[arraySize], descElements[arraySize];
+    for (int pos = 0; pos < arraySize; pos++) {
+        ascElements[pos].value = originalArray[pos];
+        ascElements[pos].originalIndex = pos;
+        descElements[pos] = ascElements[pos];
+    }
+
+    // Sort ascending
+    qsort(ascElements, arraySize, sizeof(Element), compareAsc);
+    int ascSwaps = countSwaps(ascElements, arraySize);
+
+    // Sort descending
+    qsort(descElements, arraySize, sizeof(Element), compareDesc);
+    int descSwaps = countSwaps(descElements, arraySize);
+
+    return (ascSwaps < descSwaps) ? ascSwaps : descSwaps;
+}
+
+int main() {
+    int arraySize;
+    scanf("%d", &arraySize);
+
+    int originalArray[arraySize];
+    for (int pos = 0; pos < arraySize; pos++) {
+        scanf("%d", &originalArray[pos]);
+    }
+
+    int minSwaps = lilysHomework(originalArray, arraySize);
+    printf("%d\n", minSwaps);
+
+    return 0;
+}
