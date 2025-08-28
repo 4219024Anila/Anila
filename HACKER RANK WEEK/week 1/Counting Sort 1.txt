@@ -16,7 +16,6 @@ void cs(int x, int* y) {
 
     free(z);
 }
-
 int main() {
     int p;
     scanf("%d", &p);

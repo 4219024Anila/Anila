@@ -19,7 +19,6 @@ int main() {
         scanf("%d", &heights3[i]);
         sum3 += heights3[i];
     }
-
     int i = 0, j = 0, k = 0;
 
     while (!(sum1 == sum2 && sum2 == sum3)) {
