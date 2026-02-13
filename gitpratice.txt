@@ -3,5 +3,3 @@ pratice
 git
 no 
 time
-hi
-hlo
